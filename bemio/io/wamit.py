@@ -259,7 +259,7 @@ class WamitOutput(object):
 
         # Terribly complicated code to read excitation forces and phases, RAOs, etc
         ex_all = np.zeros([6*num_bodies,wave_dir.size,T.size])
-        phase_all = ex_all.copy()
+        ex_phase_all = ex_all.copy()
         rao_all = ex_all.copy()
         rao_phase_all = ex_all.copy()
         ssy_all = ex_all.copy()
@@ -297,7 +297,7 @@ class WamitOutput(object):
                         while temp_line != empty_line:
                             count2 += 1
                             ex_all[int(temp_line.split()[0])-1,count_wave_dir-1,count_diff2-1] = float(temp_line.split()[1])
-                            phase_all[int(temp_line.split()[0])-1,count_wave_dir-1,count_diff2-1] = float(temp_line.split()[2])
+                            ex_phase_all[int(temp_line.split()[0])-1,count_wave_dir-1,count_diff2-1] = float(temp_line.split()[2])
                             temp_line = raw[i+count_diff+count+4+count2]
 
             if "RESPONSE AMPLITUDE OPERATORS" in line:
@@ -477,7 +477,7 @@ class WamitOutput(object):
             if 'ex_all' in locals() and self.ex_calc == 'diffraction' :
                 
                 self.body[i].ex.mag = ex_all[6*i:6+6*i,:,:]
-                self.body[i].ex.phase = np.deg2rad(phase_all[6*i:6+6*i,:,:])
+                self.body[i].ex.phase = np.deg2rad(ex_phase_all[6*i:6+6*i,:,:])
                 self.body[i].ex.re = self.body[i].ex.mag*np.cos(self.body[i].ex.phase)
                 self.body[i].ex.im = self.body[i].ex.mag*np.sin(self.body[i].ex.phase)
             
@@ -515,7 +515,7 @@ class WamitOutput(object):
             if 'rao_all' in locals():
 
                 self.body[i].rao.mag = rao_all[6*i:6+6*i,:,:]
-                self.body[i].rao.phase = np.deg2rad(phase_all[6*i:6+6*i,:,:])
+                self.body[i].rao.phase = np.deg2rad(rao_phase_all[6*i:6+6*i,:,:])
                 self.body[i].rao.re = self.body[i].rao.mag*np.cos(self.body[i].rao.phase)
                 self.body[i].rao.im = self.body[i].rao.mag*np.sin(self.body[i].rao.phase)
 
@@ -526,7 +526,7 @@ class WamitOutput(object):
             if 'ssy_all' in locals():
 
                 self.body[i].ssy.mag = ssy_all[6*i:6+6*i,:,:]
-                self.body[i].ssy.phase = np.deg2rad(phase_all[6*i:6+6*i,:,:])
+                self.body[i].ssy.phase = np.deg2rad(ssy_phase_all[6*i:6+6*i,:,:])
                 self.body[i].ssy.re = self.body[i].ssy.mag*np.cos(self.body[i].ssy.phase)
                 self.body[i].ssy.im = self.body[i].ssy.mag*np.sin(self.body[i].ssy.phase)
 

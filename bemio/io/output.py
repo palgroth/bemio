@@ -272,6 +272,27 @@ def write_hdf5(bemio_obj,out_file=None):
             rad.attrs['units'] = ''
             rad.attrs['description'] = 'Radiation damping. Frequency is the thrid dimension of the data structure.'
 
+            # Wave drift force momentum conservation
+            try:
+                ssyMag = f.create_dataset('body' + str(key+1) + '/hydro_coeffs/drift/mag',data=bemio_obj.body[key].ssy.mag)
+                ssyMag.attrs['units'] = ''
+                ssyMag.attrs['description'] = 'Magnitude of wave drift force'
+
+                ssyPhase = f.create_dataset('body' + str(key+1) + '/hydro_coeffs/drift/phase',data=bemio_obj.body[key].ssy.phase)
+                ssyPhase.attrs['units'] = 'rad'
+                ssyPhase.attrs['description'] = 'Phase angle of wave drift force'
+
+                ssyRe = f.create_dataset('body' + str(key+1) + '/hydro_coeffs/drift/re',data=bemio_obj.body[key].ssy.re)
+                ssyRe.attrs['units'] = ''
+                ssyRe.attrs['description'] = 'Real component of wave drift force'
+
+                ssyIm = f.create_dataset('body' + str(key+1) + '/hydro_coeffs/drift/im',data=bemio_obj.body[key].ssy.im)
+                ssyIm.attrs['units'] = ''
+                ssyIm.attrs['description'] = 'Imaginary component of wave drift force'
+            
+            except:
+                pass            
+            
         # Simulation parameters
         g = f.create_dataset('simulation_parameters/g',data=bemio_obj.body[key].g)
         g.attrs['units'] = 'm/s^2'
